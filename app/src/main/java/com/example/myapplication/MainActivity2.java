@@ -1,49 +1,62 @@
 package com.example.myapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import java.util.*;
 
-public class MainActivity2 extends AppCompatActivity {
+public class MainActivity2 {
 
-    private Button btnNextQuestion;
-    private TextView questionText;
-    private int currentQuestion = 0;
-    private String[] questions = {"Какой самый большой континент?", "Кто был первым человеком в космосе?", "Сколько лет длилась Великая Отечественная война?"};
-    private String[] answers = {"Азия", "Юрий Гагарин", "4 года"};
-    private boolean[] isAnswered = new boolean[questions.length];
+    private static final String[] QUESTIONS = {
+            "Кто является нынешним президентом Соединенных Штатов?",
+            "Столица Франции?",
+            "Какой океан самый большой в мире?",
+            "Кто нарисовал Мону Лизу?",
+            "Какое химическое обозначение золота в таблице Менделеева?"
+    };
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+    private static final String[] ANSWERS = {
+            "Джо Байден",
+            "Париж",
+            "Тихий океан",
+            "Леонардо да Винчи",
+            "Au"
+    };
 
-        btnNextQuestion = findViewById(R.id.btnNextQuestion);
-        questionText = findViewById(R.id.questionText);
-        showQuestion();
+    private static final int[] PRIZE_MONEY = {
+            100,
+            200,
+            300,
+            500,
+            1000
+    };
 
-        btnNextQuestion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isAnswered[currentQuestion]) {
-                    showQuestion();
-                } else {
-                    currentQuestion++;
-                    if (currentQuestion < questions.length) {
-                        showQuestion();
-                    } else {
+    private static int currentQuestionIndex = 0;
+    private static int currentPrizeMoney = 0;
 
-                        questionText.setText("Вы выиграли!");
-                    }
-                }
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Добро пожаловать!");
+        System.out.println("Ваш начальный бюджет: $0.");
+
+        while (currentQuestionIndex < QUESTIONS.length) {
+            System.out.println("Вопрос " + (currentQuestionIndex + 1) + ": " + QUESTIONS[currentQuestionIndex]);
+            System.out.println("Ваш выйгрыш: $" + currentPrizeMoney);
+
+            System.out.println("Введите ответ:");
+            String answer = scanner.nextLine();
+
+            if (answer.equals(ANSWERS[currentQuestionIndex])) {
+                System.out.println("Верно! Вы молодцы!");
+                currentPrizeMoney += PRIZE_MONEY[currentQuestionIndex];
+                currentQuestionIndex++;
+            } else {
+                System.out.println("К сожалению неверно.");
+                System.out.println("Игра окончена. Ваш выйгрыш: $" + currentPrizeMoney);
+                break;
             }
-        });
-    }
+        }
 
-    private void showQuestion() {
-        questionText.setText(questions[currentQuestion]);
-        isAnswered[currentQuestion] = false;
+        if (currentQuestionIndex == QUESTIONS.length) {
+            System.out.println("Поздравляю! Вы выиграли 1 000 000 долларов! Вы прошли игру, ждите продолжения!");
+        }
     }
 }
